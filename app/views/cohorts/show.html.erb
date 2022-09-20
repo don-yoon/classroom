@@ -1,15 +1,14 @@
 <%= content_for :title, "#{@cohort.cohort_name} #{@cohort.year}" %>
 <%= turbo_stream_from @cohort %>
 
+
 <div class="container px-4 mx-auto my-8">
   <div class="flex items-center justify-between mb-4">
     <h1 class="h3">
-      <%= link_to "Cohorts", cohorts_path, class: "text-black" %>
-      <span class="text-gray-400 font-light mx-2">\</span>
       <%= @cohort.cohort_name %>
-      <span class="text-gray-400 font-light mx-2">\</span>
       <%= @cohort.year%>
     </h1>
+
     <div>
       <%= form_with url: import_students_path, method: :post, multipart: true do |form| %>
         <label class="btn btn-primary">
@@ -28,5 +27,23 @@
       <div> <%= student.pref_name  %> </div>
       <div> <%= link_to "View", student, class: "btn btn-white" %> </div>
     <% end %>
+  <%= link_to "Back to cohorts", cohorts_path %>
+
+  <div class="p-8 bg-white rounded shadow">
+    <div class="text-2xl"> Students </div>
+    <table class="border-separate border-spacing-x-10 text-center">
+      <thead>
+        <th> <%= sortable @cohort, :pref_name, "Name", class: "text-gray-700 mr-1" %></th>
+        <th> <%= sortable @cohort, :absences, "Absences", class: "text-gray-700 mr-1" %></th>
+      </thead>
+      <tbody>
+        <% @students.map do |student|%>
+          <tr>
+            <td> <%= link_to student.pref_name, student_path(student)  %> </td>
+            <td> <%= student.absences  %> </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
   </div>
 </div>
